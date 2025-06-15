@@ -5,7 +5,8 @@ jobs:
   train-and-deploy:
     runs-on: ubuntu-latest
     permissions:
-      packages: write  # Izinkan akses ke GHCR
+      packages: write 
+      actions: write
 
     steps:
       # ---- Setup & Training ----
@@ -30,7 +31,7 @@ jobs:
           docker push ghcr.io/${{ github.repository_owner }}/personality-classifier:latest
 
       # ---- Upload Artifacts (Skilled/Advanced) ----
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: model-artifacts
           path: mlruns/
