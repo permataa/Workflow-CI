@@ -1,0 +1,36 @@
+name: Advanced MLflow CI with GHCR
+on: [push]
+
+jobs:
+  train-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write  # Izinkan akses ke GHCR
+
+    steps:
+      # ---- Setup & Training ----
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - run: pip install -r MLProject/requirements.txt
+      - run: mlflow run MLProject --env-manager=local
+
+      # ---- Build & Push Docker Image to GHCR ----
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and Push
+        run: |
+          docker build -t ghcr.io/${{ github.repository_owner }}/personality-classifier:latest .
+          docker push ghcr.io/${{ github.repository_owner }}/personality-classifier:latest
+
+      # ---- Upload Artifacts (Skilled/Advanced) ----
+      - uses: actions/upload-artifact@v3
+        with:
+          name: model-artifacts
+          path: mlruns/

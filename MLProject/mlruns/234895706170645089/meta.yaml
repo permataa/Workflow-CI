@@ -1,0 +1,6 @@
+artifact_location: mlflow-artifacts:/234895706170645089
+creation_time: 1749973048735
+experiment_id: '234895706170645089'
+last_update_time: 1749973048735
+lifecycle_stage: active
+name: CI-Pipeline
