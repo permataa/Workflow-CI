@@ -3,18 +3,25 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split  
 import mlflow
 import argparse
+import os
 from sklearn.metrics import accuracy_score, classification_report
 
 def train(data_path, n_estimators, max_depth):
-    # Setup MLflow
-    mlflow.set_tracking_uri("http://127.0.0.1:5000")
-    mlflow.set_experiment("CI-Pipeline")
+    # === Penyesuaian Utama: Tracking URI Dinamis ===
+    if os.getenv("GITHUB_ACTIONS") == "true":
+        # Mode CI/CD: Simpan ke filesystem
+        mlflow.set_tracking_uri("file:///mlruns")
+    else:
+        # Mode lokal: Gunakan server MLflow
+        mlflow.set_tracking_uri("http://127.0.0.1:5000")
     
-    # Enable autolog with additional options
+    mlflow.set_experiment("Personality-Classification")
+    
+    # Autolog dengan opsi tambahan
     mlflow.sklearn.autolog(
         log_input_examples=True,
         log_model_signatures=True,
-        log_models=True
+        log_models=False  # Nonaktifkan autolog model (kita log manual)
     )
 
     # Load data
@@ -22,20 +29,22 @@ def train(data_path, n_estimators, max_depth):
     X = df.drop("Personality", axis=1)
     y = df["Personality"]
 
-    # Split data (80:20)
+    # Split data
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y, 
-        test_size=0.2, 
-        random_state=42
+        X, y, test_size=0.2, random_state=42
     )
 
     with mlflow.start_run():
-        # Log data parameters
-        mlflow.log_param("data_path", data_path)
-        mlflow.log_param("train_size", len(X_train))
-        mlflow.log_param("test_size", len(X_test))
+        # Log parameters
+        mlflow.log_params({
+            "n_estimators": n_estimators,
+            "max_depth": max_depth,
+            "data_path": data_path,
+            "train_size": len(X_train),
+            "test_size": len(X_test)
+        })
         
-        # Initialize and train model
+        # Train model
         model = RandomForestClassifier(
             n_estimators=n_estimators,
             max_depth=max_depth,
@@ -43,30 +52,30 @@ def train(data_path, n_estimators, max_depth):
         )
         model.fit(X_train, y_train)
 
-        # Evaluate model
+        # Evaluate
         y_pred = model.predict(X_test)
-        test_accuracy = accuracy_score(y_test, y_pred)
+        accuracy = accuracy_score(y_test, y_pred)
         
         # Log metrics
-        mlflow.log_metric("test_accuracy", test_accuracy)
+        mlflow.log_metric("accuracy", accuracy)
         
-        # Generate and log classification report
+        # Log classification report
         report = classification_report(y_test, y_pred, output_dict=True)
-        for key in report:
-            if isinstance(report[key], dict):
-                for metric in report[key]:
-                    mlflow.log_metric(f"{key}_{metric}", report[key][metric])
-            else:
-                mlflow.log_metric(key, report[key])
-        
-        # Log model explicitly
+        for label, metrics in report.items():
+            if isinstance(metrics, dict):
+                for metric, value in metrics.items():
+                    mlflow.log_metric(f"{label}_{metric}", value)
+
+        # Log model secara manual (lebih eksplisit)
         mlflow.sklearn.log_model(
             sk_model=model,
             artifact_path="model",
-            registered_model_name="PersonalityClassifier"
+            registered_model_name="PersonalityClassifier",
+            input_example=X_train[:5],
+            signature=mlflow.models.infer_signature(X_train, y_pred)
         )
         
-        print(f"Test Accuracy: {test_accuracy:.2f}")
+        print(f"Accuracy: {accuracy:.4f}")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
