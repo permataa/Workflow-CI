@@ -25,7 +25,10 @@ jobs:
 
       - name: Train and log model with MLflow
         run: |
-          python MLProject/modelling.py --data_path MLProject/personality.csv --n_estimators 100 --max_depth 10
+          python MLProject/modelling.py \
+            --data_path MLProject/personality.csv \
+            --n_estimators 100 \
+            --max_depth 10
 
       - name: Get latest MLflow model path
         id: get_model_path
@@ -38,7 +41,10 @@ jobs:
 
       - name: Build Docker Image from MLflow Model
         run: |
-          mlflow models build-docker -m "${{ steps.get_model_path.outputs.model_path }}" -n personality-model
+          echo "Building Docker image from: ${{ steps.get_model_path.outputs.model_path }}"
+          mlflow models build-docker \
+            -m "${{ steps.get_model_path.outputs.model_path }}" \
+            -n personality-model
 
       - name: Tag Docker Image
         run: docker tag personality-model ${{ secrets.DOCKER_USERNAME }}/personality-classification:latest
