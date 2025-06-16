@@ -22,22 +22,25 @@ jobs:
           python-version: "3.12.7"
           environment-file: MLProject/conda.yaml
           activate-environment: mlflow-env
+          auto-activate-base: false
 
       # ---- 2. Run MLflow Training ----
       - name: Train model
+        shell: bash -l {0}  # Menggunakan login shell untuk inisialisasi conda
         run: |
-          conda activate mlflow-env
           cd MLProject
           mlflow run . --env-manager=local
 
       # ---- 3. Handle Artifacts ----
       - name: Get run ID
         id: get_run_id
+        shell: bash -l {0}
         run: |
           RUN_ID=$(mlflow runs list --experiment-id 0 -n 1 | awk 'NR==2 {print $4}')
           echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
 
       - name: Prepare artifacts
+        shell: bash -l {0}
         run: |
           mkdir -p artifacts
           cp -r mlruns/0/${{ env.RUN_ID }}/artifacts/model artifacts/
@@ -59,6 +62,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push Docker image
+        shell: bash -l {0}
         run: |
           mlflow models build-docker -m "mlruns/0/${{ env.RUN_ID }}/artifacts/model" -n "personality-classifier"
           docker tag personality-classifier ghcr.io/${{ github.repository_owner }}/personality-classifier:latest
