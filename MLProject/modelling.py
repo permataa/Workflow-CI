@@ -8,7 +8,7 @@ from sklearn.metrics import accuracy_score, classification_report
 
 def train(data_path, n_estimators, max_depth):
     # Selalu gunakan filesystem untuk tracking dalam CI/CD
-    mlflow.set_tracking_uri("file:///mlruns")
+    mlflow.set_tracking_uri("file://" + os.path.join(os.getcwd(), "mlruns"))
     mlflow.set_experiment("Personality-Classification")
     
     # Autolog dengan opsi tambahan
