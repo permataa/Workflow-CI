@@ -28,7 +28,7 @@ jobs:
 
       - name: Run MLflow project (train & log model)
         run: |
-          python modelling.py --data_path MLProject/personality.csv --n_estimators 100 --max_depth 10
+          python MLProject/modelling.py --data_path MLProject/personality.csv --n_estimators 100 --max_depth 10
 
       - name: Get latest MLflow run ID
         id: get_run
