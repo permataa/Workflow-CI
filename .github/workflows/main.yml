@@ -1,4 +1,4 @@
-name: Advanced MLflow Pipeline
+name: MLflow Pipeline with Pip
 
 on:
   push:
@@ -6,82 +6,45 @@ on:
   workflow_dispatch:
 
 jobs:
-  mlflow-advanced:
+  mlflow-pipeline:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
     env:
       MLFLOW_TRACKING_URI: file://${{ github.workspace }}/mlruns
 
     steps:
     # --- 1. Setup Awal ---
-    - name: Checkout kode
+    - name: Checkout repository
       uses: actions/checkout@v4
-      
-    - name: Setup Python 3.12.7
+
+    # --- 2. Setup Python ---
+    - name: Set up Python 3.12.7
       uses: actions/setup-python@v5
       with:
         python-version: "3.12.7"
-        
-   # --- 2. Install Dependencies with Conda ---
-    - name: Setup Conda environment
-      uses: conda-incubator/setup-miniconda@v2
-      with:
-        python-version: "3.12.7"
-        activate-environment: mlflow-env
-        environment-file: MLProject/conda.yaml
 
-    - name: Install additional packages via pip (if needed)
+    # --- 3. Install Dependencies ---
+    - name: Install requirements
       run: |
-        conda activate mlflow-env
-        pip install pyarrow  
+        python -m pip install --upgrade pip
+        pip install -r MLProject/requirements.txt
 
-    # --- 3. Training Model ---
-    - name: Run MLflow training
-      id: training
+    # --- 4. Run MLflow Project ---
+    - name: Run training
       run: |
         cd MLProject
-        mlflow run . --env-manager=local --experiment-name="ADVANCED-EXPERIMENT"
-        
-    # --- 4. Ekstrak Run Info ---
-    - name: Get run info
-      id: run_info
-      run: |
-        RUN_ID=$(mlflow runs list --experiment-name="ADVANCED-EXPERIMENT" -n 1 | awk 'NR==2 {print $4}')
-        echo "run_id=$RUN_ID" >> $GITHUB_OUTPUT
-        echo "MODEL_PATH=mlruns/0/$RUN_ID/artifacts/model" >> $GITHUB_ENV
+        mlflow run . --env-manager=local
 
     # --- 5. Docker Operations ---
-    - name: Login ke Docker Hub
+    - name: Login to Docker Hub
       uses: docker/login-action@v3
       with:
         username: ${{ secrets.DOCKER_HUB_USERNAME }}
         password: ${{ secrets.DOCKER_HUB_TOKEN }}
-        
-    - name: Build Docker image
-      run: |
-        mlflow models build-docker -m "$MODEL_PATH" -n "mlflow-adv-model"
-        
-    - name: Tag dan Push Docker Image
-      run: |
-        docker tag mlflow-adv-model ${{ secrets.DOCKER_HUB_USERNAME }}/mlflow-adv-model:latest
-        docker tag mlflow-adv-model ${{ secrets.DOCKER_HUB_USERNAME }}/mlflow-adv-model:${{ github.sha }}
-        docker push ${{ secrets.DOCKER_HUB_USERNAME }}/mlflow-adv-model:latest
-        docker push ${{ secrets.DOCKER_HUB_USERNAME }}/mlflow-adv-model:${{ github.sha }}
 
-    # --- 6. Backup Artifak ---
-    - name: Upload artifacts ke GitHub
-      uses: actions/upload-artifact@v4
-      with:
-        name: mlflow-artifacts
-        path: |
-          mlruns/0/${{ steps.run_info.outputs.run_id }}
-          MLProject/conda.yaml
-        retention-days: 3
-
-    # --- 7. Notifikasi (Opsional) ---
-    - name: Notifikasi status
-      if: always()
+    - name: Build and push Docker image
       run: |
-        echo "Status pekerjaan: ${{ job.status }}"
-        echo "Run ID: ${{ steps.run_info.outputs.run_id }}"
-        echo "Docker Image: ${{ secrets.DOCKER_HUB_USERNAME }}/mlflow-adv-model:${{ github.sha }}"
+        cd MLProject
+        RUN_ID=$(mlflow runs list -n 1 | awk 'NR==2 {print $4}')
+        mlflow models build-docker -m "mlruns/0/$RUN_ID/artifacts/model" -n "mlflow-pip-model"
+        docker tag mlflow-pip-model ${{ secrets.DOCKER_HUB_USERNAME }}/mlflow-pip-model:latest
+        docker push ${{ secrets.DOCKER_HUB_USERNAME }}/mlflow-pip-model:latest
