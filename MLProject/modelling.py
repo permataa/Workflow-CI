@@ -7,21 +7,15 @@ import os
 from sklearn.metrics import accuracy_score, classification_report
 
 def train(data_path, n_estimators, max_depth):
-    # === Penyesuaian Utama: Tracking URI Dinamis ===
-    if os.getenv("GITHUB_ACTIONS") == "true":
-        # Mode CI/CD: Simpan ke filesystem
-        mlflow.set_tracking_uri("file:///mlruns")
-    else:
-        # Mode lokal: Gunakan server MLflow
-        mlflow.set_tracking_uri("http://127.0.0.1:5000")
-    
+    # Selalu gunakan filesystem untuk tracking dalam CI/CD
+    mlflow.set_tracking_uri("file:///mlruns")
     mlflow.set_experiment("Personality-Classification")
     
     # Autolog dengan opsi tambahan
     mlflow.sklearn.autolog(
         log_input_examples=True,
         log_model_signatures=True,
-        log_models=False  # Nonaktifkan autolog model (kita log manual)
+        log_models=False  
     )
 
     # Load data
@@ -66,7 +60,7 @@ def train(data_path, n_estimators, max_depth):
                 for metric, value in metrics.items():
                     mlflow.log_metric(f"{label}_{metric}", value)
 
-        # Log model secara manual (lebih eksplisit)
+        # Log model secara manual
         mlflow.sklearn.log_model(
             sk_model=model,
             artifact_path="model",
