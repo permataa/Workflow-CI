@@ -35,6 +35,17 @@ jobs:
         run: |
           MODEL_PATH=$(find mlruns -type d -path "*/model" | sort -r | head -n 1)
           echo "model_path=$MODEL_PATH" >> $GITHUB_OUTPUT
+
+      
+      - name: Commit and push MLflow artifacts
+        run: |
+          git config user.name 'github-actions'
+          git config user.email 'github-actions@github.com'
+          git add mlruns
+          git commit -m 'Update model artifact from MLflow tracking' || echo "No changes to commit"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
       - name: Debug secrets
         run: echo "USERNAME=${{ secrets.DOCKER_USERNAME }}"
