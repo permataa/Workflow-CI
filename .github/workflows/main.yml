@@ -52,12 +52,11 @@ jobs:
       - name: Debug Docker Images
         run: docker images
 
-      - name: Tag Docker Image
+      - name: Docker Tag and Push
         env:
-            DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
-          echo "Tagging image with: $DOCKER_USERNAME"
+          echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
           docker tag personality-classification:latest $DOCKER_USERNAME/personality-classification:latest
-
-      - name: Push Docker Image
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/personality-classification:latest
+          docker push $DOCKER_USERNAME/personality-classification:latest
