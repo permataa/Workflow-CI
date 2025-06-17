@@ -35,6 +35,9 @@ jobs:
         run: |
           MODEL_PATH=$(find mlruns -type d -path "*/model" | sort -r | head -n 1)
           echo "model_path=$MODEL_PATH" >> $GITHUB_OUTPUT
+          
+      - name: Debug secrets
+        run: echo "USERNAME=${{ secrets.DOCKER_USERNAME }}"
 
       - name: Log in to Docker Hub
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
@@ -50,7 +53,11 @@ jobs:
         run: docker images
 
       - name: Tag Docker Image
-        run: docker tag personality-classification:latest ${{ secrets.DOCKER_USERNAME }}/personality-classification:latest
+        env:
+            DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        run: |
+          echo "Tagging image with: $DOCKER_USERNAME"
+          docker tag personality-classification:latest $DOCKER_USERNAME/personality-classification:latest
 
       - name: Push Docker Image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/personality-classification:latest
