@@ -1,0 +1,6 @@
+artifact_location: file:///home/runner/work/Workflow-CI/Workflow-CI/mlruns/158656440996738146
+creation_time: 1750157708711
+experiment_id: '158656440996738146'
+last_update_time: 1750157708711
+lifecycle_stage: active
+name: CI-Pipeline

@@ -1,0 +1,15 @@
+artifact_uri: file:///home/runner/work/Workflow-CI/Workflow-CI/mlruns/158656440996738146/274a72b0e860488f8c079f7432239f75/artifacts
+end_time: 1750157716710
+entry_point_name: ''
+experiment_id: '158656440996738146'
+lifecycle_stage: active
+run_id: 274a72b0e860488f8c079f7432239f75
+run_name: languid-stork-955
+run_uuid: 274a72b0e860488f8c079f7432239f75
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1750157708955
+status: 3
+tags: []
+user_id: runner

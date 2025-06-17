@@ -1,0 +1,13 @@
+digest: 013edaf4
+name: dataset
+profile: '{"num_rows": 3, "num_elements": 24}'
+schema: '{"mlflow_colspec": [{"type": "double", "name": "Unnamed: 0", "required":
+  true}, {"type": "double", "name": "Time_spent_Alone", "required": true}, {"type":
+  "double", "name": "Stage_fear", "required": true}, {"type": "double", "name": "Social_event_attendance",
+  "required": true}, {"type": "double", "name": "Going_outside", "required": true},
+  {"type": "double", "name": "Drained_after_socializing", "required": true}, {"type":
+  "double", "name": "Friends_circle_size", "required": true}, {"type": "double", "name":
+  "Post_frequency", "required": true}]}'
+source: '{"tags": {"mlflow.user": "runner", "mlflow.source.name": "MLProject/modelling.py",
+  "mlflow.source.type": "LOCAL", "mlflow.source.git.commit": "9a8c0d193a03540274ac8b73bae21dc62f169ad3"}}'
+source_type: code
