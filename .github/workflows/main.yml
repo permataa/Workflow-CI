@@ -43,8 +43,11 @@ jobs:
         run: |
           echo "Building Docker image from: ${{ steps.get_model_path.outputs.model_path }}"
           mlflow models build-docker \
-            -m "${{ steps.get_model_path.outputs.model_path }}" \
-            -n ${{ secrets.DOCKER_USERNAME }}/personality-classification
+              -m "${{ steps.get_model_path.outputs.model_path }}" \
+              -n personality-classification
+
+      - name: Tag Docker Image
+        run: docker tag personality-classification ${{ secrets.DOCKER_USERNAME }}/personality-classification:latest
 
       - name: Push Docker Image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/personality-classification:latest
