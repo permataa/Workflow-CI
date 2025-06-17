@@ -50,7 +50,7 @@ jobs:
         run: docker images
 
       - name: Tag Docker Image
-        run: docker tag personality-classification ${{ secrets.DOCKER_USERNAME }}/personality-classification:latest
+        run: docker tag personality-classification:latest ${{ secrets.DOCKER_USERNAME }}/personality-classification:latest
 
       - name: Push Docker Image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/personality-classification:latest
