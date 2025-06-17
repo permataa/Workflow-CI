@@ -44,7 +44,7 @@ jobs:
           echo "Building Docker image from: ${{ steps.get_model_path.outputs.model_path }}"
           mlflow models build-docker \
               -m "${{ steps.get_model_path.outputs.model_path }}" \
-              -n personality-classification
+              -n personality-classification:latest
 
       - name: Debug Docker Images
         run: docker images
