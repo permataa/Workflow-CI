@@ -46,6 +46,9 @@ jobs:
               -m "${{ steps.get_model_path.outputs.model_path }}" \
               -n personality-classification
 
+      - name: Debug Docker Images
+        run: docker images
+
       - name: Tag Docker Image
         run: docker tag personality-classification ${{ secrets.DOCKER_USERNAME }}/personality-classification:latest
 
