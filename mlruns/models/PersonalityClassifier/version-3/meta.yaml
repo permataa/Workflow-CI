@@ -1,0 +1,14 @@
+aliases: []
+creation_timestamp: 1750159747623
+current_stage: None
+description: null
+last_updated_timestamp: 1750159747623
+name: PersonalityClassifier
+run_id: 2bf4d858f4e14fb39224bc1b7fcb5e98
+run_link: null
+source: file:///home/runner/work/Workflow-CI/Workflow-CI/mlruns/158656440996738146/2bf4d858f4e14fb39224bc1b7fcb5e98/artifacts/model
+status: READY
+status_message: null
+storage_location: file:///home/runner/work/Workflow-CI/Workflow-CI/mlruns/158656440996738146/2bf4d858f4e14fb39224bc1b7fcb5e98/artifacts/model
+user_id: null
+version: 3

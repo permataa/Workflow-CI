@@ -1,0 +1,15 @@
+artifact_uri: file:///home/runner/work/Workflow-CI/Workflow-CI/mlruns/158656440996738146/2bf4d858f4e14fb39224bc1b7fcb5e98/artifacts
+end_time: 1750159747627
+entry_point_name: ''
+experiment_id: '158656440996738146'
+lifecycle_stage: active
+run_id: 2bf4d858f4e14fb39224bc1b7fcb5e98
+run_name: lyrical-horse-837
+run_uuid: 2bf4d858f4e14fb39224bc1b7fcb5e98
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1750159738679
+status: 3
+tags: []
+user_id: runner
