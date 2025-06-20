@@ -1,0 +1,15 @@
+artifact_uri: file:///home/runner/work/Workflow-CI/Workflow-CI/mlruns/209416262751080288/115121ea4dbd4f80855d33c327341888/artifacts
+end_time: 1750444335527
+entry_point_name: ''
+experiment_id: '209416262751080288'
+lifecycle_stage: active
+run_id: 115121ea4dbd4f80855d33c327341888
+run_name: orderly-wren-3
+run_uuid: 115121ea4dbd4f80855d33c327341888
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1750444328065
+status: 3
+tags: []
+user_id: runner

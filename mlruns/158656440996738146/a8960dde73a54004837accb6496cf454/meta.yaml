@@ -1,0 +1,15 @@
+artifact_uri: file:///home/runner/work/Workflow-CI/Workflow-CI/mlruns/158656440996738146/a8960dde73a54004837accb6496cf454/artifacts
+end_time: 1750444334714
+entry_point_name: ''
+experiment_id: '158656440996738146'
+lifecycle_stage: active
+run_id: a8960dde73a54004837accb6496cf454
+run_name: selective-conch-837
+run_uuid: a8960dde73a54004837accb6496cf454
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1750444331077
+status: 3
+tags: []
+user_id: runner
