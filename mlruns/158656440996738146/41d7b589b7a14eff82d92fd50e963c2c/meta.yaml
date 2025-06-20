@@ -1,0 +1,15 @@
+artifact_uri: file:///home/runner/work/Workflow-CI/Workflow-CI/mlruns/158656440996738146/41d7b589b7a14eff82d92fd50e963c2c/artifacts
+end_time: 1750441034081
+entry_point_name: ''
+experiment_id: '158656440996738146'
+lifecycle_stage: active
+run_id: 41d7b589b7a14eff82d92fd50e963c2c
+run_name: brawny-moose-67
+run_uuid: 41d7b589b7a14eff82d92fd50e963c2c
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1750441026350
+status: 3
+tags: []
+user_id: runner
