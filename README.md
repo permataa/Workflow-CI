@@ -1,3 +1,3 @@
 # Workflow-CI SISTEM ML
 
-Tautan ke Docker Hub => https://hub.docker.com/repositories/iddokerku
+https://hub.docker.com/r/iddokerku/personality-classification/tags
