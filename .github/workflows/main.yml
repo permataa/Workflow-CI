@@ -23,12 +23,14 @@ jobs:
           pip install --upgrade pip
           pip install -r MLProject/requirements.txt
 
-      - name: Train and log model with MLflow
+      - name: Train via MLflow Project
         run: |
-          python MLProject/modelling.py \
-            --data_path MLProject/personality.csv \
-            --n_estimators 100 \
-            --max_depth 10
+          mlflow run ./MLProject \
+            --env-manager=local \
+            --experiment-name "Personality Prediction" \
+            -P data_path=personality.csv \
+            -P n_estimators=100 \
+            -P max_depth=10
 
       - name: Get latest MLflow model path
         id: get_model_path
