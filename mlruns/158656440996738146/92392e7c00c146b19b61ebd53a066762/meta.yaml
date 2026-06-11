@@ -1,0 +1,15 @@
+artifact_uri: file:///home/runner/work/Workflow-CI/Workflow-CI/mlruns/158656440996738146/92392e7c00c146b19b61ebd53a066762/artifacts
+end_time: 1781179791958
+entry_point_name: ''
+experiment_id: '158656440996738146'
+lifecycle_stage: active
+run_id: 92392e7c00c146b19b61ebd53a066762
+run_name: calm-mink-460
+run_uuid: 92392e7c00c146b19b61ebd53a066762
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1781179788773
+status: 3
+tags: []
+user_id: runner
